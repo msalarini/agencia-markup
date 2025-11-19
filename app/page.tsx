@@ -9,6 +9,9 @@ import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
 import { Package, TrendingUp, DollarSign, Percent, Copy, Trash2, Calculator, Lightbulb, Info } from 'lucide-react'
 import { formatCurrency as formatCurrencyUtil, formatPercent as formatPercentUtil } from '@/lib/currency'
+import { TargetAudience } from '@/components/landing/TargetAudience'
+import { Benefits } from '@/components/landing/Benefits'
+import { LeadCapture } from '@/components/landing/LeadCapture'
 
 interface PackageData {
   id: string
@@ -167,7 +170,7 @@ export default function Home() {
                   const markup = parseFloat(pacote.markup || '0') / 100
                   const preco = custo * (1 + markup)
                   const lucro = preco - custo
-                  
+
                   return (
                     <Card key={pacote.id} className="hover:shadow-md transition-shadow">
                       <CardHeader className="pb-3">
@@ -377,7 +380,7 @@ export default function Home() {
                     <CardContent className="space-y-3 text-sm">
                       <div className="p-3 bg-white/60 rounded-lg">
                         <p className="text-violet-900">
-                          Com esses valores, você está <strong className="text-violet-700">lucrando {formatCurrency(comissao && parseFloat(comissao) > 0 ? lucroLiquido : lucroTotal)} por venda</strong>, 
+                          Com esses valores, você está <strong className="text-violet-700">lucrando {formatCurrency(comissao && parseFloat(comissao) > 0 ? lucroLiquido : lucroTotal)} por venda</strong>,
                           com uma margem de <strong className="text-violet-700">{formatPercent(margemPercentual)}</strong>.
                         </p>
                       </div>
@@ -402,6 +405,9 @@ export default function Home() {
             </Card>
           </div>
         </div>
+
+        <TargetAudience />
+        <Benefits />
 
         <Card className="mb-8 border-blue-200 bg-gradient-to-br from-blue-50/50 to-cyan-50/50">
           <CardHeader>
@@ -432,7 +438,7 @@ export default function Home() {
                   (Custo + Taxas) × (1 + Markup%)
                 </code>
               </div>
-              
+
               <div className="space-y-2 p-4 bg-white rounded-lg border border-green-100">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-2 h-2 rounded-full bg-green-500"></div>
@@ -445,7 +451,7 @@ export default function Home() {
                   (Lucro / Preço de Venda) × 100
                 </code>
               </div>
-              
+
               <div className="space-y-2 p-4 bg-white rounded-lg border border-purple-100">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-2 h-2 rounded-full bg-purple-500"></div>
@@ -458,7 +464,7 @@ export default function Home() {
                   Preço de Venda × Comissão%
                 </code>
               </div>
-              
+
               <div className="space-y-2 p-4 bg-white rounded-lg border border-emerald-100">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
@@ -475,31 +481,7 @@ export default function Home() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-r from-primary to-blue-600 text-primary-foreground">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl mb-2">🚀 Quer ainda mais recursos?</CardTitle>
-            <CardDescription className="text-primary-foreground/80 text-base">
-              Em breve: exportar pacotes em PDF, cálculos multi-moeda, relatórios mensais e integração com seu sistema!
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex justify-center">
-            <Button
-              asChild
-              size="lg"
-              variant="secondary"
-              className="shadow-lg"
-            >
-              <a
-                href="https://wa.me/5511999999999?text=Oi!%20Quero%20saber%20mais%20sobre%20os%20próximos%20recursos%20da%20Calculadora%20de%20Markup"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <DollarSign className="mr-2 h-4 w-4" />
-                Me avise quando lançar
-              </a>
-            </Button>
-          </CardContent>
-        </Card>
+        <LeadCapture />
 
         <div className="text-center mt-12 text-muted-foreground">
           <p className="text-sm">

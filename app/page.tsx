@@ -4,9 +4,11 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import { CurrencyInput } from '@/components/ui/currency-input'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
-import { Package, TrendingUp, DollarSign, Percent, Copy, Trash2, Calculator } from 'lucide-react'
+import { Package, TrendingUp, DollarSign, Percent, Copy, Trash2, Calculator, Lightbulb, Info } from 'lucide-react'
+import { formatCurrency as formatCurrencyUtil, formatPercent as formatPercentUtil } from '@/lib/currency'
 
 interface PackageData {
   id: string
@@ -40,14 +42,8 @@ export default function Home() {
   const lucroLiquido = lucroTotal - comissaoValor
   const margemPercentual = custoTotal > 0 ? (lucroTotal / precoVenda) * 100 : 0
 
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-    }).format(value)
-  }
-
-  const formatPercent = (value: number) => `${value.toFixed(2)}%`
+  const formatCurrency = formatCurrencyUtil
+  const formatPercent = formatPercentUtil
 
   const salvarPacote = () => {
     if (!nomePacote.trim()) {
@@ -112,14 +108,25 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <div className="container mx-auto px-4 py-12 max-w-7xl">
         <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Calculator className="h-10 w-10 text-primary" />
-            <h1 className="text-5xl font-bold tracking-tight">
-              Calculadora de Markup <Badge variant="default">PRO</Badge>
-            </h1>
+          <div className="inline-flex items-center justify-center gap-3 mb-4 px-6 py-3 bg-white rounded-2xl shadow-lg">
+            <div className="relative">
+              <Calculator className="h-12 w-12 text-primary" />
+              <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+            </div>
+            <div className="text-left">
+              <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+                PricePro
+              </h1>
+              <Badge variant="default" className="text-xs">
+                Markup Calculator
+              </Badge>
+            </div>
           </div>
-          <p className="text-xl text-muted-foreground">
-            Calcule, salve e gerencie seus pacotes turísticos com precisão
+          <p className="text-2xl font-semibold text-slate-800 mb-2">
+            Defina o preço dos seus pacotes em 30 segundos, sem planilhas.
+          </p>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            A ferramenta profissional para agências de turismo calcularem preços, margens e comissões com precisão.
           </p>
         </div>
 
@@ -240,28 +247,22 @@ export default function Home() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="custo">Custo do Pacote (R$)</Label>
-                <Input
+                <Label htmlFor="custo">Custo do Pacote</Label>
+                <CurrencyInput
                   id="custo"
-                  type="number"
-                  min="0"
-                  step="0.01"
                   value={custoPackage}
-                  onChange={(e) => setCustoPackage(e.target.value)}
-                  placeholder="2500.00"
+                  onValueChange={setCustoPackage}
+                  placeholder="1.500,00"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="taxas">Taxas/Impostos (R$)</Label>
-                <Input
+                <Label htmlFor="taxas">Taxas/Impostos</Label>
+                <CurrencyInput
                   id="taxas"
-                  type="number"
-                  min="0"
-                  step="0.01"
                   value={taxas}
-                  onChange={(e) => setTaxas(e.target.value)}
-                  placeholder="350.00"
+                  onValueChange={setTaxas}
+                  placeholder="350,00"
                 />
               </div>
 
@@ -366,48 +367,107 @@ export default function Home() {
                 </div>
 
                 {custoTotal > 0 && (
-                  <div className="p-4 bg-amber-50 rounded-lg border border-amber-200">
-                    <p className="text-sm text-amber-800">
-                      💡 Lucro de <strong>{formatCurrency(comissao && parseFloat(comissao) > 0 ? lucroLiquido : lucroTotal)}</strong> por venda.
-                      {' '}Em 10 vendas/mês: <strong>{formatCurrency((comissao && parseFloat(comissao) > 0 ? lucroLiquido : lucroTotal) * 10)}</strong>
-                    </p>
-                  </div>
+                  <Card className="bg-gradient-to-br from-violet-50 to-purple-50 border-violet-200">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-base flex items-center gap-2 text-violet-900">
+                        <Lightbulb className="h-5 w-5" />
+                        Análise de Negócio
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3 text-sm">
+                      <div className="p-3 bg-white/60 rounded-lg">
+                        <p className="text-violet-900">
+                          Com esses valores, você está <strong className="text-violet-700">lucrando {formatCurrency(comissao && parseFloat(comissao) > 0 ? lucroLiquido : lucroTotal)} por venda</strong>, 
+                          com uma margem de <strong className="text-violet-700">{formatPercent(margemPercentual)}</strong>.
+                        </p>
+                      </div>
+                      <div className="p-3 bg-white/60 rounded-lg">
+                        <p className="text-violet-900 font-medium mb-2">Projeção Mensal:</p>
+                        <div className="space-y-1 pl-2 border-l-2 border-violet-300">
+                          <p className="text-violet-800">
+                            • <strong>10 pacotes/mês</strong> = {formatCurrency((comissao && parseFloat(comissao) > 0 ? lucroLiquido : lucroTotal) * 10)} de lucro
+                          </p>
+                          <p className="text-violet-800">
+                            • <strong>20 pacotes/mês</strong> = {formatCurrency((comissao && parseFloat(comissao) > 0 ? lucroLiquido : lucroTotal) * 20)} de lucro
+                          </p>
+                          <p className="text-violet-800">
+                            • <strong>30 pacotes/mês</strong> = {formatCurrency((comissao && parseFloat(comissao) > 0 ? lucroLiquido : lucroTotal) * 30)} de lucro
+                          </p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
                 )}
               </CardContent>
             </Card>
           </div>
         </div>
 
-        <Card className="mb-8">
+        <Card className="mb-8 border-blue-200 bg-gradient-to-br from-blue-50/50 to-cyan-50/50">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Calculator className="h-5 w-5" />
-              Como calculamos?
-            </CardTitle>
+            <div className="flex items-center justify-between">
+              <CardTitle className="flex items-center gap-2">
+                <Info className="h-5 w-5 text-blue-600" />
+                Como Calculamos?
+              </CardTitle>
+              <Badge variant="outline" className="text-xs">
+                Fórmulas Transparentes
+              </Badge>
+            </div>
+            <CardDescription>
+              Entenda exatamente como chegamos em cada valor. Sem segredos, sem complicação.
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid md:grid-cols-2 gap-4 text-sm">
-              <div className="space-y-2">
-                <p className="font-semibold">Preço de Venda:</p>
-                <code className="block bg-muted p-3 rounded-md">
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="space-y-2 p-4 bg-white rounded-lg border border-blue-100">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                  <p className="font-semibold text-blue-900">Preço de Venda</p>
+                </div>
+                <p className="text-sm text-muted-foreground mb-2">
+                  Soma dos custos multiplicada pelo markup desejado
+                </p>
+                <code className="block bg-blue-50 p-3 rounded-md text-sm border border-blue-200">
                   (Custo + Taxas) × (1 + Markup%)
                 </code>
               </div>
-              <div className="space-y-2">
-                <p className="font-semibold">Margem Percentual:</p>
-                <code className="block bg-muted p-3 rounded-md">
+              
+              <div className="space-y-2 p-4 bg-white rounded-lg border border-green-100">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                  <p className="font-semibold text-green-900">Margem Percentual</p>
+                </div>
+                <p className="text-sm text-muted-foreground mb-2">
+                  Quanto do preço de venda é lucro
+                </p>
+                <code className="block bg-green-50 p-3 rounded-md text-sm border border-green-200">
                   (Lucro / Preço de Venda) × 100
                 </code>
               </div>
-              <div className="space-y-2">
-                <p className="font-semibold">Comissão:</p>
-                <code className="block bg-muted p-3 rounded-md">
+              
+              <div className="space-y-2 p-4 bg-white rounded-lg border border-purple-100">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-2 h-2 rounded-full bg-purple-500"></div>
+                  <p className="font-semibold text-purple-900">Comissão</p>
+                </div>
+                <p className="text-sm text-muted-foreground mb-2">
+                  Valor pago ao vendedor sobre o preço final
+                </p>
+                <code className="block bg-purple-50 p-3 rounded-md text-sm border border-purple-200">
                   Preço de Venda × Comissão%
                 </code>
               </div>
-              <div className="space-y-2">
-                <p className="font-semibold">Lucro Líquido:</p>
-                <code className="block bg-muted p-3 rounded-md">
+              
+              <div className="space-y-2 p-4 bg-white rounded-lg border border-emerald-100">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+                  <p className="font-semibold text-emerald-900">Lucro Líquido</p>
+                </div>
+                <p className="text-sm text-muted-foreground mb-2">
+                  Lucro real após descontar a comissão
+                </p>
+                <code className="block bg-emerald-50 p-3 rounded-md text-sm border border-emerald-200">
                   Lucro Total - Comissão
                 </code>
               </div>

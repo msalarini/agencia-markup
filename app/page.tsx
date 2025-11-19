@@ -21,12 +21,9 @@ export default function Home() {
   const [pacotesSalvos, setPacotesSalvos] = useState<PackageData[]>([])
   const [mostrarPacotes, setMostrarPacotes] = useState(false)
 
-  // Carregar pacotes salvos do localStorage
   useEffect(() => {
     const saved = localStorage.getItem('pacotes-salvos')
-    if (saved) {
-      setPacotesSalvos(JSON.parse(saved))
-    }
+    if (saved) setPacotesSalvos(JSON.parse(saved))
   }, [])
 
   const custoTotal = parseFloat(custoPackage || '0') + parseFloat(taxas || '0')
@@ -44,9 +41,7 @@ export default function Home() {
     }).format(value)
   }
 
-  const formatPercent = (value: number) => {
-    return `${value.toFixed(2)}%`
-  }
+  const formatPercent = (value: number) => `${value.toFixed(2)}%`
 
   const salvarPacote = () => {
     if (!nomePacote.trim()) {
@@ -110,7 +105,6 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="container mx-auto px-4 py-12 max-w-6xl">
-        {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-3">
             Calculadora de Markup <span className="text-indigo-600">PRO</span>
@@ -120,7 +114,6 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Botão Meus Pacotes */}
         {pacotesSalvos.length > 0 && (
           <div className="flex justify-center mb-8">
             <button
@@ -132,7 +125,6 @@ export default function Home() {
           </div>
         )}
 
-        {/* Lista de Pacotes Salvos */}
         {mostrarPacotes && pacotesSalvos.length > 0 && (
           <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
             <div className="flex justify-between items-center mb-6">
@@ -195,10 +187,8 @@ export default function Home() {
           </div>
         )}
 
-        {/* Main Calculator Card */}
         <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
           <div className="grid lg:grid-cols-2 gap-8">
-            {/* Input Section */}
             <div className="space-y-5">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold text-gray-800">
@@ -214,12 +204,8 @@ export default function Home() {
                 )}
               </div>
 
-              {/* Nome do Pacote */}
               <div>
-                <label
-                  htmlFor="nome"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
+                <label htmlFor="nome" className="block text-sm font-medium text-gray-700 mb-2">
                   Nome do Pacote
                 </label>
                 <input
@@ -232,12 +218,8 @@ export default function Home() {
                 />
               </div>
 
-              {/* Custo do Pacote */}
               <div>
-                <label
-                  htmlFor="custo"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
+                <label htmlFor="custo" className="block text-sm font-medium text-gray-700 mb-2">
                   Custo do Pacote (R$)
                 </label>
                 <input
@@ -252,12 +234,8 @@ export default function Home() {
                 />
               </div>
 
-              {/* Taxas/Impostos */}
               <div>
-                <label
-                  htmlFor="taxas"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
+                <label htmlFor="taxas" className="block text-sm font-medium text-gray-700 mb-2">
                   Taxas/Impostos (R$)
                 </label>
                 <input
@@ -272,12 +250,8 @@ export default function Home() {
                 />
               </div>
 
-              {/* Markup Desejado */}
               <div>
-                <label
-                  htmlFor="markup"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
+                <label htmlFor="markup" className="block text-sm font-medium text-gray-700 mb-2">
                   Markup Desejado (%)
                 </label>
                 <input
@@ -292,12 +266,8 @@ export default function Home() {
                 />
               </div>
 
-              {/* Comissão do Vendedor */}
               <div>
-                <label
-                  htmlFor="comissao"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
+                <label htmlFor="comissao" className="block text-sm font-medium text-gray-700 mb-2">
                   Comissão do Vendedor (%) <span className="text-indigo-600 font-semibold">PRO</span>
                 </label>
                 <input
@@ -312,7 +282,6 @@ export default function Home() {
                 />
               </div>
 
-              {/* Botão Salvar */}
               <button
                 onClick={salvarPacote}
                 disabled={!nomePacote.trim()}
@@ -322,14 +291,12 @@ export default function Home() {
               </button>
             </div>
 
-            {/* Results Section */}
             <div className="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl p-6">
               <h2 className="text-xl font-semibold text-gray-800 mb-6">
                 Resultado
               </h2>
 
               <div className="space-y-3">
-                {/* Preço de Venda */}
                 <div className="bg-white rounded-lg p-4 shadow-sm">
                   <p className="text-sm text-gray-600 mb-1">
                     Preço Sugerido de Venda
@@ -339,7 +306,6 @@ export default function Home() {
                   </p>
                 </div>
 
-                {/* Lucro Total */}
                 <div className="bg-white rounded-lg p-4 shadow-sm">
                   <p className="text-sm text-gray-600 mb-1">Lucro Total</p>
                   <p className="text-2xl font-bold text-green-600">
@@ -347,7 +313,6 @@ export default function Home() {
                   </p>
                 </div>
 
-                {/* Comissão do Vendedor */}
                 {comissao && parseFloat(comissao) > 0 && (
                   <div className="bg-indigo-50 rounded-lg p-4 shadow-sm border border-indigo-200">
                     <p className="text-sm text-indigo-700 mb-1 flex items-center gap-2">
@@ -359,7 +324,6 @@ export default function Home() {
                   </div>
                 )}
 
-                {/* Lucro Líquido */}
                 {comissao && parseFloat(comissao) > 0 && (
                   <div className="bg-green-50 rounded-lg p-4 shadow-sm border border-green-200">
                     <p className="text-sm text-green-700 mb-1">
@@ -371,7 +335,6 @@ export default function Home() {
                   </div>
                 )}
 
-                {/* Margem Percentual */}
                 <div className="bg-white rounded-lg p-4 shadow-sm">
                   <p className="text-sm text-gray-600 mb-1">
                     Margem Percentual
@@ -381,7 +344,6 @@ export default function Home() {
                   </p>
                 </div>
 
-                {/* Feedback de Negócio */}
                 {custoTotal > 0 && (
                   <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-200 mt-4">
                     <p className="text-sm text-yellow-800">
@@ -395,7 +357,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Explicação das Fórmulas */}
         <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
           <h3 className="text-xl font-semibold text-gray-800 mb-4">
             🧠 Como calculamos?
@@ -428,7 +389,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* CTA Section */}
         <div className="bg-gradient-to-r from-indigo-600 to-blue-600 rounded-2xl shadow-xl p-8 text-white text-center">
           <h3 className="text-2xl font-bold mb-3">
             🚀 Quer ainda mais recursos?
@@ -447,7 +407,6 @@ export default function Home() {
           </a>
         </div>
 
-        {/* Footer */}
         <div className="text-center mt-12 text-gray-600">
           <p className="text-sm">
             Desenvolvido para agências de turismo que querem crescer

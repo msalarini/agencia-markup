@@ -6,6 +6,11 @@
 # testing
 /coverage
 
+# package managers
+package-lock.json
+
+DEVELOPMENT.md
+
 # next.js
 /.next/
 /out/

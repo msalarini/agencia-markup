@@ -12,7 +12,7 @@ describe('CurrencyInput Component', () => {
   it('should display formatted value', () => {
     render(<CurrencyInput value="1234.56" onValueChange={() => {}} />)
     const input = screen.getByRole('textbox') as HTMLInputElement
-    expect(input.value).toBe('123.456,00')
+    expect(input.value).toBe('1.234,56')
   })
 
   it('should handle user input with formatting', async () => {

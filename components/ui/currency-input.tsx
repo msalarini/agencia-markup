@@ -14,9 +14,9 @@ const CurrencyInput = React.forwardRef<HTMLInputElement, CurrencyInputProps>(
 
     React.useEffect(() => {
       if (value) {
-        const numericValue = parseCurrency(value)
-        if (numericValue > 0) {
-          setDisplayValue(maskCurrency((numericValue * 100).toString()))
+        const numericValue = parseFloat(value)
+        if (!isNaN(numericValue) && numericValue > 0) {
+          setDisplayValue(maskCurrency(Math.round(numericValue * 100).toString()))
         } else {
           setDisplayValue('')
         }

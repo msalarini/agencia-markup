@@ -5,7 +5,7 @@ import { Benefits } from './Benefits'
 describe('Benefits', () => {
     it('renders the section title', () => {
         render(<Benefits />)
-        expect(screen.getByText('Por que usar o PricePro?')).toBeInTheDocument()
+        expect(screen.getByText('Por que usar o LucroTur?')).toBeInTheDocument()
     })
 
     it('renders all benefits', () => {

@@ -5,7 +5,7 @@ import { TargetAudience } from './TargetAudience'
 describe('TargetAudience', () => {
     it('renders the section title', () => {
         render(<TargetAudience />)
-        expect(screen.getByText('Pra quem é o PricePro?')).toBeInTheDocument()
+        expect(screen.getByText('Pra quem é o LucroTur?')).toBeInTheDocument()
     })
 
     it('renders all 3 target audience bullets', () => {

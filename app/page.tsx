@@ -15,6 +15,7 @@ import { Benefits } from '@/components/landing/Benefits'
 import { LeadCapture } from '@/components/landing/LeadCapture'
 import { AIMarkupSuggestion } from '@/components/ai/AIMarkupSuggestion'
 import { ChatBot } from '@/components/ai/ChatBot'
+import { Logo } from '@/components/ui/logo'
 
 interface PackageData {
   id: string
@@ -119,26 +120,14 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-12 max-w-7xl">
+
         <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center gap-4 mb-6 px-8 py-4 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700">
-            <div className="relative shrink-0">
-              <div className="p-3 bg-blue-50 dark:bg-blue-900/30 rounded-xl">
-                <Calculator className="h-10 w-10 text-blue-600 dark:text-blue-400" />
-              </div>
-              <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white dark:border-slate-800"></div>
-            </div>
-            <div className="flex flex-col items-start">
-              <h1 className="text-3xl sm:text-4xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent leading-none mb-1">
-                LucroTur
-              </h1>
-              <span className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                Gestão de Lucro para Turismo
-              </span>
-            </div>
+          <div className="flex justify-center mb-6">
+            <Logo size="lg" showSubtitle />
           </div>
-          <p className="text-2xl font-semibold text-slate-800 mb-2">
+          <p className="text-2xl font-semibold text-foreground mb-2">
             Defina o preço dos seus pacotes em 30 segundos, sem planilhas.
           </p>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -311,11 +300,11 @@ export default function Home() {
                     onChange={(e) => setComissao(e.target.value)}
                     placeholder={isPro ? "10" : "Recurso PRO"}
                     disabled={!isPro}
-                    className={!isPro ? "bg-slate-100 text-slate-400 cursor-not-allowed" : "border-primary/50 bg-primary/5"}
+                    className={!isPro ? "bg-muted text-muted-foreground cursor-not-allowed" : "border-primary/50 bg-primary/5"}
                   />
                   {!isPro && (
                     <div className="absolute inset-0 flex items-center justify-end pr-3 pointer-events-none">
-                      <span className="text-xs text-slate-500">Bloqueado</span>
+                      <span className="text-xs text-muted-foreground">Bloqueado</span>
                     </div>
                   )}
                 </div>
@@ -351,7 +340,7 @@ export default function Home() {
                   </p>
                 </div>
 
-                <div className="p-4 bg-green-50 rounded-lg">
+                <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
                   <p className="text-sm text-muted-foreground mb-1">Lucro Total</p>
                   <p className="text-2xl font-bold text-green-600">
                     {formatCurrency(lucroTotal)}
@@ -360,62 +349,62 @@ export default function Home() {
 
                 {comissao && parseFloat(comissao) > 0 && (
                   <>
-                    <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                    <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
                       <div className="flex items-center justify-between mb-1">
-                        <p className="text-sm text-blue-700">Comissão ({comissao}%)</p>
+                        <p className="text-sm text-blue-700 dark:text-blue-300">Comissão ({comissao}%)</p>
                         <Badge variant="default" className="text-xs">PRO</Badge>
                       </div>
-                      <p className="text-xl font-bold text-blue-700">
+                      <p className="text-xl font-bold text-blue-700 dark:text-blue-300">
                         {formatCurrency(comissaoValor)}
                       </p>
                     </div>
 
-                    <div className="p-4 bg-emerald-50 rounded-lg border border-emerald-200">
-                      <p className="text-sm text-emerald-700 mb-1">
+                    <div className="p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg border border-emerald-200 dark:border-emerald-800">
+                      <p className="text-sm text-emerald-700 dark:text-emerald-300 mb-1">
                         Lucro Líquido (após comissão)
                       </p>
-                      <p className="text-2xl font-bold text-emerald-700">
+                      <p className="text-2xl font-bold text-emerald-700 dark:text-emerald-300">
                         {formatCurrency(lucroLiquido)}
                       </p>
                     </div>
                   </>
                 )}
 
-                <div className="p-4 bg-indigo-50 rounded-lg">
+                <div className="p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg">
                   <p className="text-sm text-muted-foreground mb-1 flex items-center gap-2">
                     <Percent className="h-4 w-4" />
                     Margem Percentual
                   </p>
-                  <p className="text-2xl font-bold text-indigo-600">
+                  <p className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">
                     {formatPercent(margemPercentual)}
                   </p>
                 </div>
 
                 {custoTotal > 0 && (
-                  <Card className="bg-gradient-to-br from-violet-50 to-purple-50 border-violet-200">
+                  <Card className="bg-violet-50 dark:bg-violet-900/10 border-violet-200 dark:border-violet-800">
                     <CardHeader className="pb-3">
-                      <CardTitle className="text-base flex items-center gap-2 text-violet-900">
+                      <CardTitle className="text-base flex items-center gap-2 text-violet-900 dark:text-violet-300">
                         <Lightbulb className="h-5 w-5" />
                         Análise de Negócio
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3 text-sm">
-                      <div className="p-3 bg-white/60 rounded-lg">
-                        <p className="text-violet-900">
-                          Com esses valores, você está <strong className="text-violet-700">lucrando {formatCurrency(comissao && parseFloat(comissao) > 0 ? lucroLiquido : lucroTotal)} por venda</strong>,
-                          com uma margem de <strong className="text-violet-700">{formatPercent(margemPercentual)}</strong>.
+                      <div className="p-3 bg-background/60 rounded-lg">
+                        <p className="text-violet-900 dark:text-violet-300">
+                          Com esses valores, você está <strong className="text-violet-700 dark:text-violet-400">lucrando {formatCurrency(comissao && parseFloat(comissao) > 0 ? lucroLiquido : lucroTotal)} por venda</strong>,
+                          com uma margem de <strong className="text-violet-700 dark:text-violet-400">{formatPercent(margemPercentual)}</strong>.
                         </p>
                       </div>
-                      <div className="p-3 bg-white/60 rounded-lg">
-                        <p className="text-violet-900 font-medium mb-2">Projeção Mensal:</p>
-                        <div className="space-y-1 pl-2 border-l-2 border-violet-300">
-                          <p className="text-violet-800">
+                      <div className="p-3 bg-background/60 rounded-lg">
+                        <p className="text-violet-900 dark:text-violet-300 font-medium mb-2">Projeção Mensal:</p>
+                        <div className="space-y-1 pl-2 border-l-2 border-violet-300 dark:border-violet-700">
+                          <p className="text-violet-800 dark:text-violet-300">
                             • <strong>10 pacotes/mês</strong> = {formatCurrency((comissao && parseFloat(comissao) > 0 ? lucroLiquido : lucroTotal) * 10)} de lucro
                           </p>
-                          <p className="text-violet-800">
+                          <p className="text-violet-800 dark:text-violet-300">
                             • <strong>20 pacotes/mês</strong> = {formatCurrency((comissao && parseFloat(comissao) > 0 ? lucroLiquido : lucroTotal) * 20)} de lucro
                           </p>
-                          <p className="text-violet-800">
+                          <p className="text-violet-800 dark:text-violet-300">
                             • <strong>30 pacotes/mês</strong> = {formatCurrency((comissao && parseFloat(comissao) > 0 ? lucroLiquido : lucroTotal) * 30)} de lucro
                           </p>
                         </div>
@@ -437,11 +426,13 @@ export default function Home() {
         <TargetAudience />
         <Benefits />
 
-        <Card className="mb-8 border-blue-200 bg-gradient-to-br from-blue-50/50 to-cyan-50/50">
+        <div className="mb-24"></div>
+
+        <Card className="mb-8 border-blue-200 dark:border-blue-800 bg-blue-50/50 dark:bg-blue-900/10">
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle className="flex items-center gap-2">
-                <Info className="h-5 w-5 text-blue-600" />
+                <Info className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                 Como Calculamos?
               </CardTitle>
               <Badge variant="outline" className="text-xs">
@@ -454,54 +445,54 @@ export default function Home() {
           </CardHeader>
           <CardContent>
             <div className="grid md:grid-cols-2 gap-4">
-              <div className="space-y-2 p-4 bg-white rounded-lg border border-blue-100">
+              <div className="space-y-2 p-4 bg-card rounded-lg border border-blue-100 dark:border-blue-900">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                  <p className="font-semibold text-blue-900">Preço de Venda</p>
+                  <p className="font-semibold text-blue-900 dark:text-blue-300">Preço de Venda</p>
                 </div>
                 <p className="text-sm text-muted-foreground mb-2">
                   Soma dos custos multiplicada pelo markup desejado
                 </p>
-                <code className="block bg-blue-50 p-3 rounded-md text-sm border border-blue-200">
+                <code className="block bg-blue-50 dark:bg-blue-900/20 p-3 rounded-md text-sm border border-blue-200 dark:border-blue-800">
                   (Custo + Taxas) × (1 + Markup%)
                 </code>
               </div>
 
-              <div className="space-y-2 p-4 bg-white rounded-lg border border-green-100">
+              <div className="space-y-2 p-4 bg-card rounded-lg border border-green-100 dark:border-green-900">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                  <p className="font-semibold text-green-900">Margem Percentual</p>
+                  <p className="font-semibold text-green-900 dark:text-green-300">Margem Percentual</p>
                 </div>
                 <p className="text-sm text-muted-foreground mb-2">
                   Quanto do preço de venda é lucro
                 </p>
-                <code className="block bg-green-50 p-3 rounded-md text-sm border border-green-200">
+                <code className="block bg-green-50 dark:bg-green-900/20 p-3 rounded-md text-sm border border-green-200 dark:border-green-800">
                   (Lucro / Preço de Venda) × 100
                 </code>
               </div>
 
-              <div className="space-y-2 p-4 bg-white rounded-lg border border-purple-100">
+              <div className="space-y-2 p-4 bg-card rounded-lg border border-purple-100 dark:border-purple-900">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-2 h-2 rounded-full bg-purple-500"></div>
-                  <p className="font-semibold text-purple-900">Comissão</p>
+                  <p className="font-semibold text-purple-900 dark:text-purple-300">Comissão</p>
                 </div>
                 <p className="text-sm text-muted-foreground mb-2">
                   Valor pago ao vendedor sobre o preço final
                 </p>
-                <code className="block bg-purple-50 p-3 rounded-md text-sm border border-purple-200">
+                <code className="block bg-purple-50 dark:bg-purple-900/20 p-3 rounded-md text-sm border border-purple-200 dark:border-purple-800">
                   Preço de Venda × Comissão%
                 </code>
               </div>
 
-              <div className="space-y-2 p-4 bg-white rounded-lg border border-emerald-100">
+              <div className="space-y-2 p-4 bg-card rounded-lg border border-emerald-100 dark:border-emerald-900">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
-                  <p className="font-semibold text-emerald-900">Lucro Líquido</p>
+                  <p className="font-semibold text-emerald-900 dark:text-emerald-300">Lucro Líquido</p>
                 </div>
                 <p className="text-sm text-muted-foreground mb-2">
                   Lucro real após descontar a comissão
                 </p>
-                <code className="block bg-emerald-50 p-3 rounded-md text-sm border border-emerald-200">
+                <code className="block bg-emerald-50 dark:bg-emerald-900/20 p-3 rounded-md text-sm border border-emerald-200 dark:border-emerald-800">
                   Lucro Total - Comissão
                 </code>
               </div>

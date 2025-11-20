@@ -21,20 +21,24 @@ export function Benefits() {
     ]
 
     return (
-        <section className="py-12 bg-slate-50" aria-label="Benefícios">
+        <section className="py-12 bg-muted/30" aria-label="Benefícios">
             <div className="container mx-auto px-4 max-w-6xl">
-                <h2 className="text-3xl font-bold text-center mb-12 text-slate-800">
-                    Por que usar o PricePro?
+                <h2 className="text-3xl font-bold text-center mb-12 text-foreground">
+                    Por que usar o LucroTur?
                 </h2>
                 <div className="grid md:grid-cols-3 gap-8">
                     {benefits.map((benefit, index) => (
-                        <div key={index} className="flex flex-col items-center text-center p-6 rounded-xl bg-white shadow-sm hover:shadow-md transition-all">
-                            <div className="h-12 w-12 bg-primary/10 rounded-full flex items-center justify-center mb-4 text-primary">
-                                <benefit.icon className="h-6 w-6" />
-                            </div>
-                            <h3 className="text-xl font-semibold mb-2 text-slate-900">{benefit.title}</h3>
-                            <p className="text-slate-600">{benefit.description}</p>
-                        </div>
+                        <Card key={index} className="flex flex-col items-center text-center border-none shadow-sm hover:shadow-md transition-all">
+                            <CardHeader className="pb-2">
+                                <div className="h-12 w-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-2 text-primary">
+                                    <benefit.icon className="h-6 w-6" />
+                                </div>
+                                <CardTitle className="text-xl font-semibold">{benefit.title}</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <p className="text-muted-foreground">{benefit.description}</p>
+                            </CardContent>
+                        </Card>
                     ))}
                 </div>
             </div>

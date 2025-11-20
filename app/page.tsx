@@ -111,6 +111,13 @@ export default function Home() {
     setNomePacote('')
   }
 
+  const handleMarkupChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    if (value === '' || (/^\d*\.?\d*$/.test(value) && parseFloat(value) >= 0)) {
+      setMarkup(value)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <div className="container mx-auto px-4 py-12 max-w-7xl">
@@ -277,11 +284,10 @@ export default function Home() {
                 <Label htmlFor="markup">Markup Desejado (%)</Label>
                 <Input
                   id="markup"
-                  type="number"
-                  min="0"
-                  step="0.1"
+                  type="text"
+                  inputMode="decimal"
                   value={markup}
-                  onChange={(e) => setMarkup(e.target.value)}
+                  onChange={handleMarkupChange}
                   placeholder="25"
                 />
               </div>

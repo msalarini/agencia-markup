@@ -31,7 +31,7 @@ export function Header() {
                     <div className="bg-blue-600 text-white p-1 rounded-lg">
                         <Sparkles className="h-5 w-5" />
                     </div>
-                    Agência Markup
+                    LucroTur
                 </Link>
 
                 {/* Right Side */}

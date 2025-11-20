@@ -122,10 +122,10 @@ export default function Home() {
             </div>
             <div className="text-left">
               <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-                PricePro
+                LucroTur
               </h1>
               <Badge variant="default" className="text-xs">
-                Markup Calculator
+                Gestão de Lucro para Turismo
               </Badge>
             </div>
           </div>

@@ -50,7 +50,7 @@ export default function ProPage() {
                         MAIS POPULAR
                     </div>
                     <CardHeader className="pb-8 pt-10">
-                        <CardTitle className="text-3xl font-bold">PricePro <span className="text-blue-600">PRO</span></CardTitle>
+                        <CardTitle className="text-3xl font-bold">LucroTur <span className="text-blue-600">PRO</span></CardTitle>
                         <CardDescription className="text-lg mt-2">
                             Para agências que querem crescer
                         </CardDescription>

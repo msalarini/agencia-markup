@@ -8,23 +8,23 @@ import { Header } from "@/components/layout/Header"
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Calculadora de Markup para Agência de Turismo | PricePro',
-  description: 'Calcule o preço de venda ideal para seus pacotes turísticos em 30 segundos. Ferramenta gratuita e profissional para agências definirem markup, comissão e lucro líquido.',
-  keywords: ['calculadora markup', 'agência de turismo', 'precificação viagens', 'calculadora comissão', 'turismo', 'markup turismo', 'preço pacote turistico'],
-  authors: [{ name: 'PricePro' }],
-  creator: 'PricePro',
-  publisher: 'PricePro',
-  metadataBase: new URL('https://pricepro.vercel.app'),
+  title: 'LucroTur - Calculadora de Markup para Agências de Turismo',
+  description: 'Calcule o preço de venda ideal para seus pacotes turísticos em 30 segundos. Ferramenta profissional para agências definirem markup, comissão e lucro líquido.',
+  keywords: ['calculadora markup', 'agência de turismo', 'precificação viagens', 'calculadora comissão', 'turismo', 'markup turismo', 'preço pacote turistico', 'lucrotur'],
+  authors: [{ name: 'LucroTur' }],
+  creator: 'LucroTur',
+  publisher: 'LucroTur',
+  metadataBase: new URL('https://lucrotur.com.br'),
   openGraph: {
-    title: 'PricePro - Calculadora de Markup para Agências de Turismo',
+    title: 'LucroTur - Calculadora de Markup para Agências de Turismo',
     description: 'Defina o preço dos seus pacotes em 30 segundos. Calcule margem, comissão e lucro líquido sem planilhas.',
     type: 'website',
     locale: 'pt_BR',
-    siteName: 'PricePro',
+    siteName: 'LucroTur',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'PricePro - Calculadora de Markup para Turismo',
+    title: 'LucroTur - Calculadora de Markup para Turismo',
     description: 'Calcule preços, margem e comissão para seus pacotes turísticos em segundos.',
   },
   robots: {

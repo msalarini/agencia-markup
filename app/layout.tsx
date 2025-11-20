@@ -4,6 +4,7 @@ import './globals.css'
 import { Analytics } from '@/components/Analytics'
 import { AuthProvider } from '@/components/providers/AuthProvider'
 import { Header } from "@/components/layout/Header"
+import { ThemeProvider } from "@/components/providers/ThemeProvider"
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -46,13 +47,20 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" suppressHydrationWarning>
       <body className={inter.className}>
-        <AuthProvider>
-          <Header />
-          <Analytics />
-          {children}
-        </AuthProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <AuthProvider>
+            <Header />
+            <Analytics />
+            {children}
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

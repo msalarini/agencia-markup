@@ -122,18 +122,20 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <div className="container mx-auto px-4 py-12 max-w-7xl">
         <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center gap-3 mb-4 px-6 py-3 bg-white rounded-2xl shadow-lg">
-            <div className="relative">
-              <Calculator className="h-12 w-12 text-primary" />
-              <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+          <div className="inline-flex items-center justify-center gap-4 mb-6 px-8 py-4 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700">
+            <div className="relative shrink-0">
+              <div className="p-3 bg-blue-50 dark:bg-blue-900/30 rounded-xl">
+                <Calculator className="h-10 w-10 text-blue-600 dark:text-blue-400" />
+              </div>
+              <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white dark:border-slate-800"></div>
             </div>
-            <div className="text-left">
-              <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+            <div className="flex flex-col items-start">
+              <h1 className="text-3xl sm:text-4xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent leading-none mb-1">
                 LucroTur
               </h1>
-              <Badge variant="default" className="text-xs">
+              <span className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 Gestão de Lucro para Turismo
-              </Badge>
+              </span>
             </div>
           </div>
           <p className="text-2xl font-semibold text-slate-800 mb-2">

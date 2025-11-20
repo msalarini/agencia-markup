@@ -12,6 +12,7 @@ import {
     ChevronDown,
     Sparkles
 } from "lucide-react"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 
 export function Header() {
     const { user, isPro, signOut } = useAuth()
@@ -36,6 +37,7 @@ export function Header() {
 
                 {/* Right Side */}
                 <div className="flex items-center gap-4">
+                    <ThemeToggle />
                     {user ? (
                         <div className="relative">
                             <button

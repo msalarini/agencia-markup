@@ -31,8 +31,8 @@ test.describe('Landing Page & Calculator', () => {
     });
 
     test('deve calcular o preço de venda corretamente', async ({ page }) => {
-        // Preenche Custo = 1000
-        await page.locator('input[id="custo"]').fill('1000');
+        // Preenche Custo = 1000,00 (digita-se em centavos: 100000)
+        await page.locator('input[id="custo"]').fill('100000');
 
         // Preenche Markup = 20%
         await page.locator('input[id="markup"]').fill('20');

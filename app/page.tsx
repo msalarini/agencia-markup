@@ -7,8 +7,9 @@ import { Input } from '@/components/ui/input'
 import { CurrencyInput } from '@/components/ui/currency-input'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
-import { Package, TrendingUp, DollarSign, Percent, Copy, Trash2, Calculator, Lightbulb, Info } from 'lucide-react'
+import { Package, TrendingUp, DollarSign, Percent, Copy, Trash2, Calculator, Lightbulb, Info, Lock } from 'lucide-react'
 import { formatCurrency as formatCurrencyUtil, formatPercent as formatPercentUtil } from '@/lib/currency'
+import { useAuth } from '@/components/providers/AuthProvider'
 import { TargetAudience } from '@/components/landing/TargetAudience'
 import { Benefits } from '@/components/landing/Benefits'
 import { LeadCapture } from '@/components/landing/LeadCapture'
@@ -26,6 +27,7 @@ interface PackageData {
 }
 
 export default function Home() {
+  const { isPro } = useAuth()
   const [custoPackage, setCustoPackage] = useState('')
   const [taxas, setTaxas] = useState('')
   const [markup, setMarkup] = useState('')
@@ -287,18 +289,28 @@ export default function Home() {
               <div className="space-y-2">
                 <Label htmlFor="comissao" className="flex items-center gap-2">
                   Comissão do Vendedor (%)
-                  <Badge variant="secondary">PRO</Badge>
+                  <Badge variant={isPro ? "default" : "secondary"} className="flex items-center gap-1">
+                    {isPro ? "PRO" : <><Lock className="h-3 w-3" /> PRO</>}
+                  </Badge>
                 </Label>
-                <Input
-                  id="comissao"
-                  type="number"
-                  min="0"
-                  step="0.1"
-                  value={comissao}
-                  onChange={(e) => setComissao(e.target.value)}
-                  placeholder="10"
-                  className="border-primary/50 bg-primary/5"
-                />
+                <div className="relative">
+                  <Input
+                    id="comissao"
+                    type="number"
+                    min="0"
+                    step="0.1"
+                    value={comissao}
+                    onChange={(e) => setComissao(e.target.value)}
+                    placeholder={isPro ? "10" : "Recurso PRO"}
+                    disabled={!isPro}
+                    className={!isPro ? "bg-slate-100 text-slate-400 cursor-not-allowed" : "border-primary/50 bg-primary/5"}
+                  />
+                  {!isPro && (
+                    <div className="absolute inset-0 flex items-center justify-end pr-3 pointer-events-none">
+                      <span className="text-xs text-slate-500">Bloqueado</span>
+                    </div>
+                  )}
+                </div>
               </div>
 
               <Button

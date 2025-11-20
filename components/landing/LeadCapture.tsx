@@ -14,11 +14,7 @@ export function LeadCapture() {
             // Simulate API call
             console.log('Lead captured:', email)
             setSubmitted(true)
-            // Reset after 3 seconds
-            setTimeout(() => {
-                setSubmitted(false)
-                setEmail('')
-            }, 3000)
+            // Removed timeout to keep success message visible for user confirmation
         }
     }
 

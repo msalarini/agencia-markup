@@ -74,6 +74,9 @@ describe('parseCurrency', () => {
   it('should return 0 for invalid input', () => {
     expect(parseCurrency('abc')).toBe(0)
   })
+  it('should handle negative numbers', () => {
+    expect(parseCurrency('-1.234,56')).toBe(-1234.56)
+  })
 })
 
 describe('maskCurrency', () => {
@@ -99,6 +102,10 @@ describe('maskCurrency', () => {
 
   it('should ignore non-digit characters', () => {
     expect(maskCurrency('12abc34')).toBe('12,34')
+  })
+
+  it('should return empty string for input with no digits', () => {
+    expect(maskCurrency('abc')).toBe('')
   })
 })
 

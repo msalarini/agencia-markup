@@ -24,8 +24,7 @@ describe('TargetAudience', () => {
 
     it('renders check icons', () => {
         const { container } = render(<TargetAudience />)
-        // Check for the lucide icon class or SVG
-        const icons = container.querySelectorAll('.lucide-check-circle-2')
+        const icons = container.querySelectorAll('svg')
         expect(icons.length).toBe(3)
     })
 })

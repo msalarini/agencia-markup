@@ -101,7 +101,7 @@ export function AIMarkupSuggestion({ custo, taxas, onApplyMarkup }: AIMarkupSugg
             <Lightbulb className="h-5 w-5 text-primary" />
             <CardTitle>Sugestões de Markup com IA</CardTitle>
           </div>
-          <Badge variant="outline" className="bg-gradient-to-r from-blue-50 to-purple-50">
+          <Badge variant="outline" className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 dark:text-foreground">
             ✨ Powered by Gemini
           </Badge>
         </div>
@@ -265,3 +265,4 @@ export function AIMarkupSuggestion({ custo, taxas, onApplyMarkup }: AIMarkupSugg
     </Card>
   )
 }
+

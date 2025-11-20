@@ -6,15 +6,17 @@ if (!apiKey) {
   throw new Error('GOOGLE_AI_API_KEY não está configurada')
 }
 
+// Inicializar com API v1 (estável)
 const genAI = new GoogleGenerativeAI(apiKey)
 
+// Usar gemini-2.0-flash-exp (modelo mais recente e estável)
 export const geminiModel = genAI.getGenerativeModel({ 
-  model: 'gemini-1.5-flash',
+  model: 'gemini-2.0-flash-exp',
   generationConfig: {
     temperature: 0.7,
-    topP: 0.8,
+    topP: 0.95,
     topK: 40,
-    maxOutputTokens: 1024,
+    maxOutputTokens: 8192,
   }
 })
 

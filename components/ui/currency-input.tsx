@@ -33,7 +33,7 @@ const CurrencyInput = React.forwardRef<HTMLInputElement, CurrencyInputProps>(
       
       if (!digits) {
         setDisplayValue('')
-        onValueChange('0')
+        onValueChange('')
         return
       }
 

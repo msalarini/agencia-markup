@@ -36,7 +36,7 @@ describe('CurrencyInput Component', () => {
     
     await user.clear(input)
     
-    expect(handleChange).toHaveBeenCalledWith('0')
+    expect(handleChange).toHaveBeenCalledWith('')
   })
 
   it('should apply custom className', () => {

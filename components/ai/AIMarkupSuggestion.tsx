@@ -9,6 +9,8 @@ import { Badge } from '@/components/ui/badge'
 import { Lightbulb, Loader2, TrendingUp, AlertCircle } from 'lucide-react'
 import { formatCurrency } from '@/lib/currency'
 import { ProLock } from '@/components/pro/ProLock'
+import { PDFExport } from '@/components/pro/PDFExport'
+import type { PDFData } from '@/lib/pdf/generatePDF'
 
 interface Suggestion {
   tipo: string
@@ -248,16 +250,33 @@ export function AIMarkupSuggestion({ custo, taxas, onApplyMarkup }: AIMarkupSugg
                 ))}
               </div>
 
-              <Button
-                onClick={() => {
-                  setSuggestions(null)
-                  setShowForm(false)
-                }}
-                variant="outline"
-                className="w-full"
-              >
-                Nova Análise
-              </Button>
+              <div className="grid grid-cols-2 gap-3">
+                <Button
+                  onClick={() => {
+                    setSuggestions(null)
+                    setShowForm(false)
+                  }}
+                  variant="outline"
+                  className="w-full"
+                >
+                  Nova Análise
+                </Button>
+
+                <PDFExport
+                  data={{
+                    packageName: tipo || destino || 'Pacote',
+                    cost: custoNum,
+                    taxes: taxasNum,
+                    markup: suggestions.sugestoes[0]?.markup || 0,
+                    finalPrice: suggestions.sugestoes[0]?.precoVenda || 0,
+                    suggestions: suggestions.sugestoes,
+                    currency: 'BRL'
+                  }}
+                  template="detailed"
+                  variant="default"
+                  size="default"
+                />
+              </div>
             </div>
           )}
         </ProLock>

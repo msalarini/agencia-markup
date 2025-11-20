@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 
 import { LeadCapture } from './LeadCapture'
 
@@ -9,7 +9,14 @@ describe('LeadCapture', () => {
         expect(screen.getByText(/Quer ser avisado/)).toBeInTheDocument()
     })
 
-    it('allows entering an email and submitting', () => {
+    it('allows entering an email and submitting', async () => {
+        global.fetch = vi.fn(() =>
+            Promise.resolve({
+                ok: true,
+                json: () => Promise.resolve({ success: true }),
+            })
+        ) as any
+
         render(<LeadCapture />)
 
         const input = screen.getByPlaceholderText('Seu melhor e-mail')
@@ -20,6 +27,8 @@ describe('LeadCapture', () => {
 
         fireEvent.click(button)
 
-        expect(screen.getByText('Obrigado! Você está na lista.')).toBeInTheDocument()
+        await waitFor(() => {
+            expect(screen.getByText('Obrigado! Você está na lista.')).toBeInTheDocument()
+        })
     })
 })

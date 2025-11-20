@@ -8,13 +8,28 @@ export function LeadCapture() {
     const [email, setEmail] = useState('')
     const [submitted, setSubmitted] = useState(false)
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         if (email) {
-            // Simulate API call
-            console.log('Lead captured:', email)
-            setSubmitted(true)
-            // Removed timeout to keep success message visible for user confirmation
+            try {
+                const response = await fetch('/api/leads', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email }),
+                })
+
+                if (response.ok) {
+                    setSubmitted(true)
+                    setEmail('')
+                } else {
+                    alert('Erro ao cadastrar email. Tente novamente.')
+                }
+            } catch (error) {
+                console.error('Erro:', error)
+                alert('Erro ao cadastrar email. Tente novamente.')
+            }
         }
     }
 

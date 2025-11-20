@@ -16,16 +16,16 @@ function AuthErrorContent() {
                 <CardTitle className="text-red-600">Erro de Autenticação</CardTitle>
             </CardHeader>
             <CardContent>
-                <p className="text-slate-600 mb-4">
+                <p className="text-muted-foreground mb-4">
                     Não foi possível validar seu login com o Google.
                 </p>
                 {error && (
-                    <div className="bg-red-50 border border-red-200 rounded p-3 text-sm text-red-800 font-mono break-all mb-4">
+                    <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded p-3 text-sm text-red-800 dark:text-red-200 font-mono break-all mb-4">
                         {error}
                     </div>
                 )}
-                <p className="text-sm text-slate-500">Isso pode acontecer se:</p>
-                <ul className="list-disc list-inside mt-2 text-sm text-slate-500 space-y-1">
+                <p className="text-sm text-muted-foreground">Isso pode acontecer se:</p>
+                <ul className="list-disc list-inside mt-2 text-sm text-muted-foreground space-y-1">
                     <li>A conexão expirou.</li>
                     <li>Você cancelou o login.</li>
                     <li>Houve um erro de configuração no servidor.</li>
@@ -45,7 +45,7 @@ function AuthErrorContent() {
 
 export default function AuthErrorPage() {
     return (
-        <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
+        <div className="min-h-screen flex items-center justify-center bg-background p-4">
             <Suspense fallback={<div>Carregando...</div>}>
                 <AuthErrorContent />
             </Suspense>

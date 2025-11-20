@@ -51,11 +51,11 @@ export default function BillingPage() {
     }
 
     return (
-        <div className="min-h-screen bg-slate-50 py-12 px-4">
+        <div className="min-h-screen bg-background py-12 px-4">
             <div className="max-w-3xl mx-auto space-y-8">
                 <div className="space-y-2">
-                    <h1 className="text-3xl font-bold text-slate-900">Gerenciar Assinatura</h1>
-                    <p className="text-slate-600">Visualize e gerencie seu plano atual.</p>
+                    <h1 className="text-3xl font-bold text-foreground">Gerenciar Assinatura</h1>
+                    <p className="text-muted-foreground">Visualize e gerencie seu plano atual.</p>
                 </div>
 
                 <Card>
@@ -64,12 +64,12 @@ export default function BillingPage() {
                         <CardDescription>Detalhes da sua assinatura ativa.</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                        <div className="flex items-center justify-between p-4 bg-white border rounded-lg">
+                        <div className="flex items-center justify-between p-4 bg-card border rounded-lg">
                             <div>
-                                <p className="font-medium text-slate-900">
-                                    {isPro ? "PricePro PRO" : "Plano Gratuito"}
+                                <p className="font-medium text-foreground">
+                                    {isPro ? "LucroTur PRO" : "Plano Gratuito"}
                                 </p>
-                                <p className="text-sm text-slate-500">
+                                <p className="text-sm text-muted-foreground">
                                     {isPro ? "R$ 10,00 / mês" : "Acesso limitado"}
                                 </p>
                             </div>
@@ -91,7 +91,7 @@ export default function BillingPage() {
                         )}
                     </CardContent>
                     {isPro && (
-                        <CardFooter className="border-t bg-slate-50 px-6 py-4">
+                        <CardFooter className="border-t bg-muted/30 px-6 py-4">
                             <div className="w-full flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                                 <div className="flex items-center gap-2 text-amber-600 text-sm">
                                     <AlertTriangle className="h-4 w-4" />

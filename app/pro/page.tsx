@@ -34,13 +34,13 @@ export default function ProPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-20 px-4">
+        <div className="min-h-screen bg-background py-20 px-4">
             <div className="max-w-3xl mx-auto text-center space-y-8">
                 <div className="space-y-4">
-                    <h1 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
+                    <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
                         Desbloqueie todo o potencial da sua Agência
                     </h1>
-                    <p className="text-xl text-slate-600 max-w-2xl mx-auto">
+                    <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
                         Tenha acesso a ferramentas exclusivas de IA e maximize seus lucros com o plano PRO.
                     </p>
                 </div>
@@ -63,28 +63,28 @@ export default function ProPage() {
 
                         <ul className="space-y-3 text-left px-6">
                             <li className="flex items-center gap-3">
-                                <div className="h-6 w-6 rounded-full bg-green-100 flex items-center justify-center shrink-0">
-                                    <Check className="h-4 w-4 text-green-600" />
+                                <div className="h-6 w-6 rounded-full bg-green-500/10 dark:bg-green-500/20 flex items-center justify-center shrink-0">
+                                    <Check className="h-4 w-4 text-green-600 dark:text-green-400" />
                                 </div>
-                                <span className="text-slate-700">Sugestões de Markup com <strong>IA Ilimitada</strong></span>
+                                <span className="text-foreground">Sugestões de Markup com <strong>IA Ilimitada</strong></span>
                             </li>
                             <li className="flex items-center gap-3">
-                                <div className="h-6 w-6 rounded-full bg-green-100 flex items-center justify-center shrink-0">
-                                    <Check className="h-4 w-4 text-green-600" />
+                                <div className="h-6 w-6 rounded-full bg-green-500/10 dark:bg-green-500/20 flex items-center justify-center shrink-0">
+                                    <Check className="h-4 w-4 text-green-600 dark:text-green-400" />
                                 </div>
-                                <span className="text-slate-700">Cálculo de Comissões Avançado</span>
+                                <span className="text-foreground">Cálculo de Comissões Avançado</span>
                             </li>
                             <li className="flex items-center gap-3">
-                                <div className="h-6 w-6 rounded-full bg-green-100 flex items-center justify-center shrink-0">
-                                    <Check className="h-4 w-4 text-green-600" />
+                                <div className="h-6 w-6 rounded-full bg-green-500/10 dark:bg-green-500/20 flex items-center justify-center shrink-0">
+                                    <Check className="h-4 w-4 text-green-600 dark:text-green-400" />
                                 </div>
-                                <span className="text-slate-700">Suporte Prioritário</span>
+                                <span className="text-foreground">Suporte Prioritário</span>
                             </li>
                             <li className="flex items-center gap-3">
-                                <div className="h-6 w-6 rounded-full bg-green-100 flex items-center justify-center shrink-0">
-                                    <Check className="h-4 w-4 text-green-600" />
+                                <div className="h-6 w-6 rounded-full bg-green-500/10 dark:bg-green-500/20 flex items-center justify-center shrink-0">
+                                    <Check className="h-4 w-4 text-green-600 dark:text-green-400" />
                                 </div>
-                                <span className="text-slate-700">Acesso antecipado a novas features</span>
+                                <span className="text-foreground">Acesso antecipado a novas features</span>
                             </li>
                         </ul>
                     </CardContent>
@@ -100,7 +100,7 @@ export default function ProPage() {
                     </CardFooter>
                 </Card>
 
-                <p className="text-sm text-slate-500">
+                <p className="text-sm text-muted-foreground">
                     Cancelamento a qualquer momento. Pagamento seguro.
                 </p>
             </div>

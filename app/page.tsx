@@ -12,6 +12,8 @@ import { formatCurrency as formatCurrencyUtil, formatPercent as formatPercentUti
 import { TargetAudience } from '@/components/landing/TargetAudience'
 import { Benefits } from '@/components/landing/Benefits'
 import { LeadCapture } from '@/components/landing/LeadCapture'
+import { AIMarkupSuggestion } from '@/components/ai/AIMarkupSuggestion'
+import { ChatBot } from '@/components/ai/ChatBot'
 
 interface PackageData {
   id: string
@@ -406,6 +408,12 @@ export default function Home() {
           </div>
         </div>
 
+        <AIMarkupSuggestion
+          custo={custoPackage}
+          taxas={taxas}
+          onApplyMarkup={(suggestedMarkup) => setMarkup(suggestedMarkup.toString())}
+        />
+
         <TargetAudience />
         <Benefits />
 
@@ -489,6 +497,8 @@ export default function Home() {
           </p>
         </div>
       </div>
+
+      <ChatBot />
     </div>
   )
 }

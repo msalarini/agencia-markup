@@ -9,6 +9,8 @@ Ferramenta profissional para cálculo de preços de pacotes turísticos com gest
 - Salvar/editar/duplicar pacotes (localStorage)
 - Projeção de lucro mensal
 - Interface responsiva
+- 🤖 **Sugestões de Markup com IA** (Google Gemini)
+- 💬 **Chatbot de Atendimento** inteligente
 
 ## Tech Stack
 
@@ -18,12 +20,36 @@ Ferramenta profissional para cálculo de preços de pacotes turísticos com gest
 
 ## Getting Started
 
+### 1. Instalação
+
 ```bash
 npm install
+```
+
+### 2. Configurar API Key (para funcionalidades de IA)
+
+Crie um arquivo `.env.local`:
+
+```bash
+GOOGLE_AI_API_KEY=sua_chave_aqui
+```
+
+Obtenha sua chave em: https://aistudio.google.com/app/apikey
+
+### 3. Executar
+
+```bash
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000)
+
+## 🤖 Funcionalidades de IA
+
+Veja documentação completa em: [AI_FEATURES.md](./AI_FEATURES.md)
+
+- **Sugestões de Markup**: IA analisa custos e sugere 3 opções de markup
+- **Chatbot**: Assistente virtual para dúvidas e suporte
 
 ## Deploy
 

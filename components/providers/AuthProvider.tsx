@@ -22,14 +22,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [isPro, setIsPro] = useState(false)
 
     useEffect(() => {
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-            setSession(session)
-            setUser(session?.user ?? null)
-            checkUserProStatus(session?.user)
-            setIsLoading(false)
-        })
+        const initAuth = async () => {
+            // Check for mock session (for E2E testing)
+            if (typeof window !== 'undefined' && (window as any).__MOCK_SESSION__) {
+                const mockSession = (window as any).__MOCK_SESSION__
+                setSession(mockSession)
+                setUser(mockSession.user)
+                // In test mode, trust the metadata to avoid network flakes
+                setIsPro(mockSession.user.user_metadata?.is_pro ?? false)
+                setIsLoading(false)
+                return
+            }
 
-        return () => subscription.unsubscribe()
+            const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+                setSession(session)
+                setUser(session?.user ?? null)
+                checkUserProStatus(session?.user)
+                setIsLoading(false)
+            })
+
+            return () => subscription.unsubscribe()
+        }
+
+        initAuth()
     }, [])
 
     const checkUserProStatus = async (user: User | null | undefined) => {

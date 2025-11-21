@@ -4,9 +4,12 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { MetricsCard } from '@/components/dashboard/MetricsCard'
+import { CalculationHistory } from '@/components/dashboard/CalculationHistory'
+import { ReportsChart } from '@/components/dashboard/ReportsChart'
 import { Calculator, DollarSign, TrendingUp, CheckCircle, Loader2 } from 'lucide-react'
 import { useAuth } from '@/components/providers/AuthProvider'
 import { formatCurrencyValue } from '@/lib/currency/converter'
+import { ReportExport } from '@/components/dashboard/ReportExport'
 
 interface Stats {
     metrics: {
@@ -26,12 +29,14 @@ interface Stats {
 
 export default function DashboardPage() {
     const router = useRouter()
-    const { isPro } = useAuth()
+    const { isPro, isLoading: authLoading } = useAuth()
     const [stats, setStats] = useState<Stats | null>(null)
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        if (isPro === false) {
+        if (authLoading) return
+
+        if (!isPro) {
             router.push('/pro')
             return
         }
@@ -39,7 +44,7 @@ export default function DashboardPage() {
         if (isPro) {
             fetchStats()
         }
-    }, [isPro, router])
+    }, [isPro, authLoading, router])
 
     const fetchStats = async () => {
         try {
@@ -68,11 +73,14 @@ export default function DashboardPage() {
     return (
         <div className="min-h-screen bg-background">
             <div className="container mx-auto px-4 py-12 max-w-7xl">
-                <div className="mb-8">
-                    <h1 className="text-3xl font-bold text-foreground mb-2">Dashboard PRO</h1>
-                    <p className="text-muted-foreground">
-                        Acompanhe suas métricas e histórico de cálculos
-                    </p>
+                <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h1 className="text-3xl font-bold text-foreground mb-2">Dashboard PRO</h1>
+                        <p className="text-muted-foreground">
+                            Acompanhe suas métricas e histórico de cálculos
+                        </p>
+                    </div>
+                    <ReportExport />
                 </div>
 
                 {stats && (
@@ -105,34 +113,15 @@ export default function DashboardPage() {
                         </div>
 
                         {stats.evolution.length > 0 && (
-                            <Card className="mb-8">
-                                <CardHeader>
-                                    <CardTitle>Evolução Mensal</CardTitle>
-                                    <CardDescription>
-                                        Últimos {stats.evolution.length} meses
-                                    </CardDescription>
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="space-y-4">
-                                        {stats.evolution.map((item, idx) => (
-                                            <div key={idx} className="flex items-center justify-between">
-                                                <div>
-                                                    <p className="font-medium">{item.month}</p>
-                                                    <p className="text-sm text-muted-foreground">
-                                                        {item.count} cálculo{item.count !== 1 ? 's' : ''}
-                                                    </p>
-                                                </div>
-                                                <div className="text-right">
-                                                    <p className="font-bold text-green-600">
-                                                        {formatCurrencyValue(item.revenue, 'BRL')}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </CardContent>
-                            </Card>
+                            <div className="mb-8">
+                                <ReportsChart data={stats.evolution} />
+                            </div>
                         )}
+
+                        {/* Histórico de Cálculos */}
+                        <div className="mb-8">
+                            <CalculationHistory />
+                        </div>
 
                         {stats.metrics.totalCalculations === 0 && (
                             <Card>

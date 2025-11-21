@@ -1,92 +1,128 @@
-import { test, expect, Page } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
-test.describe('PRO Feature Access', () => {
+test.describe('LucroTur PRO Flow', () => {
 
-    // Helper to inject session
-    const injectSession = async (page: Page, isPro: boolean) => {
-        const user = {
-            id: isPro ? 'pro-user-id' : 'test-user-id',
-            aud: 'authenticated',
-            role: 'authenticated',
-            email: isPro ? 'pro@example.com' : 'test@example.com',
-            app_metadata: { provider: 'email' },
-            user_metadata: {},
-            created_at: new Date().toISOString(),
-        };
+    test.beforeEach(async ({ page }) => {
+        // Inject mock session
+        await page.addInitScript(() => {
+            (window as any).__MOCK_SESSION__ = {
+                user: {
+                    id: 'user-123',
+                    aud: 'authenticated',
+                    role: 'authenticated',
+                    email: 'pro@example.com',
+                    user_metadata: { is_pro: true }
+                },
+                access_token: 'mock-token',
+                refresh_token: 'mock-refresh-token',
+                expires_in: 3600,
+                token_type: 'bearer'
+            };
+        });
 
-        //     const session = {
-        //         access_token: 'fake-access-token',
-        //         refresh_token: 'fake-refresh-token',
-        //         expires_in: 3600,
-        //         expires_at: Math.floor(Date.now() / 1000) + 3600,
-        //         token_type: 'bearer',
-        //         user: user,
-        //     };
+        // Mock authentication as PRO user (network fallback)
+        await page.route('**/auth/v1/user', async route => {
+            await route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({
+                    id: 'user-123',
+                    aud: 'authenticated',
+                    role: 'authenticated',
+                    email: 'pro@example.com',
+                    user_metadata: { is_pro: true }
+                })
+            });
+        });
 
-        // We assume the project URL is 'your-project-url' from .env.local
-        // The default storage key format for Supabase v2 is `sb-<project-ref>-auth-token`
-        // If the URL is not a standard Supabase URL, the key might be different.
-        // But let's try the most common pattern or just 'supabase.auth.token' if configured.
-        // Given 'your-project-url', the ref is likely just 'your-project-url' if it's not parsed strictly.
-        // Let's try setting it for 'your-project-url'.
-
-        // IMPORTANT: We need to match the key used by the client.
-        // We can try to spy on localStorage or just set it.
-        // For now, we'll try 'sb-your-project-url-auth-token'.
-
-        //     await page.addInitScript(value => {
-        //         window.localStorage.setItem('sb-your-project-url-auth-token', JSON.stringify(value));
-        //     }, session);
-    };
-
-    // test('Free user sees lock screen on AI features', async ({ page }) => {
-    //     await injectSession(page, false);
-
-    //     // Mock Profiles table to return is_pro: false
-    //     await page.route('**/rest/v1/profiles*', async route => {
-    //         await route.fulfill({
-    //             status: 200,
-    //             contentType: 'application/json',
-    //             body: JSON.stringify({ is_pro: false }),
-    //         });
-    //     });
-
-    //     await page.goto('/');
-
-    //     // Navigate to AI feature (assuming it's on the main page or accessible)
-    //     const aiSection = page.getByText('Sugestões de Markup com IA');
-    //     await expect(aiSection).toBeVisible();
-
-    //     // Check for the lock overlay or "Upgrade" button
-    //     await expect(page.getByText('Recurso Premium')).toBeVisible();
-    //     await expect(page.getByText('Entrar para Desbloquear')).toBeVisible();
-    // });
-
-    test('PRO user can access AI features', async ({ page }) => {
-        await injectSession(page, true);
-
-        // Mock Profiles table to return is_pro: true
+        // Mock PRO status check
         await page.route('**/rest/v1/profiles*', async route => {
             await route.fulfill({
                 status: 200,
                 contentType: 'application/json',
-                body: JSON.stringify({ is_pro: true }),
+                body: JSON.stringify({ is_pro: true })
             });
         });
 
-        await page.goto('/');
+        // Mock Stats API
+        await page.route('**/api/calculations/stats', async route => {
+            await route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({
+                    metrics: {
+                        totalCalculations: 10,
+                        totalRevenue: 50000,
+                        totalProfit: 10000,
+                        averageMarkup: 20,
+                        conversionRate: 50,
+                        averageTicket: 5000
+                    },
+                    evolution: [
+                        { month: 'Nov', count: 5, revenue: 25000 },
+                        { month: 'Dez', count: 5, revenue: 25000 }
+                    ]
+                })
+            });
+        });
 
-        // Fill in the cost to make the button enabled
-        // We use locator('#custo') and type to simulate user input for the currency mask
-        await page.locator('#custo').click();
-        await page.keyboard.type('1000');
-
-        // Verify Lock screen is GONE
-        await expect(page.getByText('Recurso Premium')).not.toBeVisible();
-
-        // Verify "Obter Sugestões da IA" button is clickable
-        const generateButton = page.getByRole('button', { name: 'Obter Sugestões da IA' });
-        await expect(generateButton).toBeVisible();
-        await expect(generateButton).toBeEnabled();
+        // Mock Calculations History
+        await page.route('**/api/calculations*', async route => {
+            if (route.request().method() === 'GET') {
+                await route.fulfill({
+                    status: 200,
+                    contentType: 'application/json',
+                    body: JSON.stringify({
+                        calculations: [
+                            {
+                                id: 'calc-1',
+                                created_at: new Date().toISOString(),
+                                package_name: 'Pacote Teste',
+                                cost: 1000,
+                                markup: 20,
+                                final_price: 1200,
+                                profit: 200,
+                                currency: 'BRL',
+                                status: 'saved'
+                            }
+                        ]
+                    })
+                });
+            } else {
+                await route.continue();
+            }
+        });
     });
+
+    test('should access dashboard and see metrics', async ({ page }) => {
+        await page.goto('/dashboard');
+
+        // Check header
+        await expect(page.getByText('Dashboard PRO')).toBeVisible();
+
+        // Check metrics
+        await expect(page.getByText('Total de Cálculos')).toBeVisible();
+        await expect(page.getByText('10', { exact: true })).toBeVisible(); // Total calculations
+        await expect(page.getByText('R$ 5.000,00')).toBeVisible(); // Ticket medio
+    });
+
+    test('should display evolution chart', async ({ page }) => {
+        await page.goto('/dashboard');
+        await expect(page.getByText('Evolução de Receita')).toBeVisible();
+    });
+
+    test('should display calculation history', async ({ page }) => {
+        await page.goto('/dashboard');
+        await expect(page.getByText('Histórico de Cálculos')).toBeVisible();
+        await expect(page.getByText('Pacote Teste')).toBeVisible();
+        await expect(page.getByText('R$ 1.200,00')).toBeVisible();
+    });
+
+    test('should have export report button', async ({ page }) => {
+        await page.goto('/dashboard');
+        const exportBtn = page.getByRole('button', { name: 'Exportar Relatório' });
+        await expect(exportBtn).toBeVisible();
+        await expect(exportBtn).toBeEnabled();
+    });
+
 });

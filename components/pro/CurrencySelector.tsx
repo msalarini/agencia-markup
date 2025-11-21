@@ -4,43 +4,65 @@ import { useState, useEffect } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Label } from '@/components/ui/label'
 import { SUPPORTED_CURRENCIES, type CurrencyCode, type CurrencyRate } from '@/lib/currency/converter'
-import { useProStatus } from '@/hooks/useProStatus'
+
 import { Loader2 } from 'lucide-react'
 
 interface CurrencySelectorProps {
     value: CurrencyCode
     onChange: (currency: CurrencyCode) => void
     showRate?: boolean
+    isPro: boolean
 }
 
-export const CurrencySelector = ({ value, onChange, showRate = true }: CurrencySelectorProps) => {
-    const { isPro } = useProStatus()
+export const CurrencySelector = ({ value, onChange, showRate = true, isPro }: CurrencySelectorProps) => {
+    // const { isPro } = useProStatus() - Removed to use prop from parent
     const [rates, setRates] = useState<CurrencyRate[]>([])
     const [loading, setLoading] = useState(true)
     const [lastUpdate, setLastUpdate] = useState<string>('')
 
     useEffect(() => {
+        let mounted = true
+
         const fetchRates = async () => {
             try {
-                const response = await fetch('/api/currency/rates')
+                // Timeout de 5 segundos para não ficar travado
+                const controller = new AbortController()
+                const timeoutId = setTimeout(() => controller.abort(), 5000)
+
+                const response = await fetch('/api/currency/rates', {
+                    signal: controller.signal,
+                    next: { revalidate: 3600 }
+                })
+                clearTimeout(timeoutId)
+
+                if (!response.ok) throw new Error('Falha na API')
+
                 const data = await response.json()
-                setRates(data.rates)
-                setLastUpdate(data.lastUpdate)
-            } catch (error) {
-                console.error('Erro ao buscar taxas:', error)
+                if (mounted) {
+                    setRates(data.rates)
+                    setLastUpdate(data.lastUpdate)
+                }
+            } catch (error: any) {
+                if (error.name === 'AbortError') {
+                    console.warn('Timeout ao buscar taxas (5s) - Usando valores offline')
+                } else {
+                    console.error('Erro ao buscar taxas:', error)
+                }
+                // Fallback silencioso - usa moedas suportadas sem taxa dinâmica
             } finally {
-                setLoading(false)
+                if (mounted) setLoading(false)
             }
         }
 
         fetchRates()
+
+        return () => { mounted = false }
     }, [])
 
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const newCurrency = e.target.value as CurrencyCode
 
         if (!isPro && newCurrency !== 'BRL') {
-            // Redirecionar para upgrade
             window.location.href = '/pro'
             return
         }
@@ -54,7 +76,14 @@ export const CurrencySelector = ({ value, onChange, showRate = true }: CurrencyS
 
     return (
         <div className="space-y-2">
-            <Label htmlFor="currency-select">Moeda</Label>
+            <Label htmlFor="currency-select" className="flex items-center gap-2">
+                Moeda
+                {!isPro && (
+                    <Badge variant="secondary" className="text-[10px] px-1 h-5">
+                        Opções PRO
+                    </Badge>
+                )}
+            </Label>
             <div className="relative">
                 <select
                     id="currency-select"
@@ -64,12 +93,12 @@ export const CurrencySelector = ({ value, onChange, showRate = true }: CurrencyS
                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                     {loading ? (
-                        <option>Carregando...</option>
+                        <option>Carregando moedas...</option>
                     ) : (
                         Object.values(SUPPORTED_CURRENCIES).map((currency) => (
                             <option key={currency.code} value={currency.code}>
                                 {currency.flag} {currency.name} ({currency.code})
-                                {!isPro && currency.code !== 'BRL' ? ' - PRO' : ''}
+                                {!isPro && currency.code !== 'BRL' ? ' (PRO)' : ''}
                             </option>
                         ))
                     )}
@@ -90,12 +119,6 @@ export const CurrencySelector = ({ value, onChange, showRate = true }: CurrencyS
                         <span>• atualizado há {timeSinceUpdate}h</span>
                     )}
                 </div>
-            )}
-
-            {!isPro && value !== 'BRL' && (
-                <Badge variant="secondary" className="text-xs">
-                    Feature PRO - Faça upgrade para usar outras moedas
-                </Badge>
             )}
         </div>
     )

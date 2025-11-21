@@ -33,6 +33,9 @@ export async function GET(request: NextRequest) {
         const status = searchParams.get('status')
         const currency = searchParams.get('currency')
 
+        const startDate = searchParams.get('start_date')
+        const endDate = searchParams.get('end_date')
+
         let query = supabase
             .from('calculations')
             .select('*', { count: 'exact' })
@@ -46,6 +49,14 @@ export async function GET(request: NextRequest) {
 
         if (currency) {
             query = query.eq('currency', currency)
+        }
+
+        if (startDate) {
+            query = query.gte('created_at', startDate)
+        }
+
+        if (endDate) {
+            query = query.lte('created_at', endDate)
         }
 
         const { data, error, count } = await query

@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input'
 import { CurrencyInput } from '@/components/ui/currency-input'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
-import { Package, TrendingUp, DollarSign, Percent, Copy, Trash2, Calculator, Lightbulb, Info, Lock } from 'lucide-react'
+import { Package, TrendingUp, DollarSign, Percent, Copy, Trash2, Calculator, Lightbulb, Info, Lock, Loader2, CheckCircle } from 'lucide-react'
 import { formatCurrency as formatCurrencyUtil, formatPercent as formatPercentUtil } from '@/lib/currency'
 import { useAuth } from '@/components/providers/AuthProvider'
 import { TargetAudience } from '@/components/landing/TargetAudience'
@@ -18,6 +18,7 @@ import { ChatBot } from '@/components/ai/ChatBot'
 import { Logo } from '@/components/ui/logo'
 import { CurrencySelector } from '@/components/pro/CurrencySelector'
 import { formatCurrencyValue, type CurrencyCode } from '@/lib/currency/converter'
+import { useDebounce } from '@/hooks/useDebounce'
 
 interface PackageData {
   id: string
@@ -39,11 +40,63 @@ export default function Home() {
   const [currency, setCurrency] = useState<CurrencyCode>('BRL')
   const [pacotesSalvos, setPacotesSalvos] = useState<PackageData[]>([])
   const [mostrarPacotes, setMostrarPacotes] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const [lastSaved, setLastSaved] = useState<Date | null>(null)
+
+  // Debounce values for auto-save
+  const debouncedCusto = useDebounce(custoPackage, 1000)
+  const debouncedTaxas = useDebounce(taxas, 1000)
+  const debouncedMarkup = useDebounce(markup, 1000)
+  const debouncedComissao = useDebounce(comissao, 1000)
+  const debouncedNome = useDebounce(nomePacote, 1000)
 
   useEffect(() => {
     const saved = localStorage.getItem('pacotes-salvos')
     if (saved) setPacotesSalvos(JSON.parse(saved))
   }, [])
+
+  // Auto-save effect
+  useEffect(() => {
+    if (!isPro || !debouncedCusto) return
+
+    const autoSave = async () => {
+      setSaving(true)
+      try {
+        const custoTotal = parseFloat(debouncedCusto || '0') + parseFloat(debouncedTaxas || '0')
+        const markupDecimal = parseFloat(debouncedMarkup || '0') / 100
+        const precoVenda = custoTotal * (1 + markupDecimal)
+        const lucroTotal = precoVenda - custoTotal
+        const comissaoValor = precoVenda * (parseFloat(debouncedComissao || '0') / 100)
+        const lucroLiquido = lucroTotal - comissaoValor
+
+        const payload = {
+          package_name: debouncedNome || 'Rascunho sem nome',
+          cost: custoTotal,
+          taxes: parseFloat(debouncedTaxas || '0'),
+          markup: parseFloat(debouncedMarkup || '0'),
+          commission: parseFloat(debouncedComissao || '0'),
+          final_price: precoVenda,
+          profit: lucroLiquido,
+          currency: currency,
+          status: 'draft'
+        }
+
+        await fetch('/api/calculations', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        })
+
+        setLastSaved(new Date())
+      } catch (error) {
+        console.error('Erro no auto-save:', error)
+      } finally {
+        setSaving(false)
+      }
+    }
+
+    autoSave()
+  }, [debouncedCusto, debouncedTaxas, debouncedMarkup, debouncedComissao, debouncedNome, isPro, currency])
 
   const custoTotal = parseFloat(custoPackage || '0') + parseFloat(taxas || '0')
   const markupDecimal = parseFloat(markup || '0') / 100
@@ -101,36 +154,39 @@ export default function Home() {
 
   const deletarPacote = (id: string) => {
     if (confirm('Tem certeza que deseja excluir este pacote?')) {
-      const novaLista = pacotesSalvos.filter((p) => p.id !== id)
+      const novaLista = pacotesSalvos.filter(p => p.id !== id)
       setPacotesSalvos(novaLista)
       localStorage.setItem('pacotes-salvos', JSON.stringify(novaLista))
     }
   }
 
   const limparCampos = () => {
-    setCustoPackage('')
-    setTaxas('')
-    setMarkup('')
-    setComissao('')
-    setNomePacote('')
+    if (confirm('Tem certeza que deseja limpar todos os campos?')) {
+      setCustoPackage('')
+      setTaxas('')
+      setMarkup('')
+      setComissao('')
+      setNomePacote('')
+    }
   }
 
   const handleMarkupChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    if (value === '' || (/^\d*\.?\d*$/.test(value) && parseFloat(value) >= 0)) {
-      setMarkup(value)
-    }
+    const value = e.target.value.replace(/[^0-9.,]/g, '').replace(',', '.')
+    setMarkup(value)
   }
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-12 max-w-7xl">
+      <div className="container mx-auto px-4 py-8 max-w-6xl">
+        <div className="flex justify-center mb-8">
+          <Logo size="lg" />
+        </div>
 
         <div className="text-center mb-12">
-          <div className="flex justify-center mb-6">
-            <Logo size="lg" showSubtitle />
-          </div>
-          <p className="text-2xl font-semibold text-foreground mb-2">
+          <h1 className="text-4xl font-bold tracking-tight text-foreground mb-4">
+            Calculadora de Markup Turístico
+          </h1>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Defina o preço dos seus pacotes em 30 segundos, sem planilhas.
           </p>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -231,7 +287,24 @@ export default function Home() {
           <Card>
             <CardHeader>
               <div className="flex justify-between items-center">
-                <CardTitle>Dados do Pacote</CardTitle>
+                <div className="flex items-center gap-2">
+                  <CardTitle>Dados do Pacote</CardTitle>
+                  {isPro && (
+                    <div className="text-xs text-muted-foreground flex items-center gap-2 ml-4">
+                      {saving ? (
+                        <span className="flex items-center gap-1 text-primary">
+                          <Loader2 className="h-3 w-3 animate-spin" />
+                          Salvando...
+                        </span>
+                      ) : lastSaved ? (
+                        <span className="text-green-600 flex items-center gap-1">
+                          <CheckCircle className="h-3 w-3" />
+                          Salvo às {lastSaved.toLocaleTimeString()}
+                        </span>
+                      ) : null}
+                    </div>
+                  )}
+                </div>
                 {(custoPackage || taxas || markup || comissao || nomePacote) && (
                   <Button
                     onClick={limparCampos}
@@ -258,6 +331,7 @@ export default function Home() {
                 value={currency}
                 onChange={setCurrency}
                 showRate={true}
+                isPro={isPro}
               />
 
               <div className="space-y-2">

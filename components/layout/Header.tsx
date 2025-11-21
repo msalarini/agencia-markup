@@ -10,6 +10,7 @@ import {
     CreditCard,
     User,
     ChevronDown,
+    LayoutDashboard,
 } from "lucide-react"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { Logo } from "@/components/ui/logo"
@@ -68,6 +69,17 @@ export function Header() {
                                             <p className="text-xs text-muted-foreground">Logado como</p>
                                             <p className="text-sm font-medium truncate text-foreground">{user.email}</p>
                                         </div>
+
+                                        {isPro && (
+                                            <Link
+                                                href="/dashboard"
+                                                className="flex items-center gap-2 px-4 py-2 text-sm text-foreground hover:bg-accent"
+                                                onClick={() => setIsMenuOpen(false)}
+                                            >
+                                                <LayoutDashboard className="h-4 w-4" />
+                                                Dashboard
+                                            </Link>
+                                        )}
 
                                         <Link
                                             href="/billing"

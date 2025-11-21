@@ -16,6 +16,8 @@ import { LeadCapture } from '@/components/landing/LeadCapture'
 import { AIMarkupSuggestion } from '@/components/ai/AIMarkupSuggestion'
 import { ChatBot } from '@/components/ai/ChatBot'
 import { Logo } from '@/components/ui/logo'
+import { CurrencySelector } from '@/components/pro/CurrencySelector'
+import { formatCurrencyValue, type CurrencyCode } from '@/lib/currency/converter'
 
 interface PackageData {
   id: string
@@ -34,6 +36,7 @@ export default function Home() {
   const [markup, setMarkup] = useState('')
   const [comissao, setComissao] = useState('')
   const [nomePacote, setNomePacote] = useState('')
+  const [currency, setCurrency] = useState<CurrencyCode>('BRL')
   const [pacotesSalvos, setPacotesSalvos] = useState<PackageData[]>([])
   const [mostrarPacotes, setMostrarPacotes] = useState(false)
 
@@ -50,7 +53,7 @@ export default function Home() {
   const lucroLiquido = lucroTotal - comissaoValor
   const margemPercentual = custoTotal > 0 ? (lucroTotal / precoVenda) * 100 : 0
 
-  const formatCurrency = formatCurrencyUtil
+  const formatCurrency = (value: number) => formatCurrencyValue(value, currency)
   const formatPercent = formatPercentUtil
 
   const salvarPacote = () => {
@@ -250,6 +253,12 @@ export default function Home() {
                   placeholder="Ex: Cancún 5 dias"
                 />
               </div>
+
+              <CurrencySelector
+                value={currency}
+                onChange={setCurrency}
+                showRate={true}
+              />
 
               <div className="space-y-2">
                 <Label htmlFor="custo">Custo do Pacote</Label>

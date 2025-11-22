@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -20,6 +20,7 @@ import { formatCurrencyValue, type CurrencyCode } from '@/lib/currency/converter
 import { useDebounce } from '@/hooks/useDebounce'
 import { ShareButtons } from '@/components/pro/ShareButtons'
 import { CommissionSplit } from '@/components/pro/CommissionSplit'
+import { PaymentStatusHandler } from '@/components/pro/PaymentStatusHandler'
 
 interface PackageData {
   id: string
@@ -178,6 +179,10 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background">
+      <Suspense fallback={null}>
+        <PaymentStatusHandler />
+      </Suspense>
+
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         <div className="flex justify-center mb-8">
           <Logo size="lg" />

@@ -31,9 +31,9 @@ export async function POST(request: Request) {
                 },
                 external_reference: user.id, // IMPORTANT: We use this to identify the user in the webhook
                 back_urls: {
-                    success: `${process.env.NEXT_PUBLIC_BASE_URL}/pro?success=true`,
-                    failure: `${process.env.NEXT_PUBLIC_BASE_URL}/pro?error=true`,
-                    pending: `${process.env.NEXT_PUBLIC_BASE_URL}/pro?pending=true`,
+                    success: `${process.env.NEXT_PUBLIC_BASE_URL}/?success=true`,
+                    failure: `${process.env.NEXT_PUBLIC_BASE_URL}/?error=true`,
+                    pending: `${process.env.NEXT_PUBLIC_BASE_URL}/?pending=true`,
                 },
                 auto_return: 'approved',
             }

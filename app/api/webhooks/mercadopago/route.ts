@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabase/server'
+import { createClient } from '@supabase/supabase-js'
 import { MercadoPagoConfig, Payment } from 'mercadopago'
 import { NextResponse } from 'next/server'
 
@@ -18,7 +18,11 @@ export async function POST(request: Request) {
                 const userId = paymentData.external_reference
 
                 if (userId) {
-                    const supabase = createClient()
+                    // Initialize Supabase Admin Client to bypass RLS
+                    const supabase = createClient(
+                        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+                        process.env.SUPABASE_SERVICE_ROLE_KEY!
+                    )
 
                     // Update user profile to PRO
                     const { error } = await supabase

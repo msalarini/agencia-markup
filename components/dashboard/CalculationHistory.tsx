@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { formatCurrencyValue } from '@/lib/currency/converter'
-import { Loader2, Trash2, Filter, X } from 'lucide-react'
+import { Loader2, Trash2, Filter, X, MessageCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -179,6 +179,21 @@ export function CalculationHistory() {
                                             {formatCurrencyValue(calc.profit, calc.currency as any)}
                                         </td>
                                         <td className="px-4 py-3 text-right">
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-50 mr-1"
+                                                onClick={() => {
+                                                    const priceFormatted = formatCurrencyValue(calc.final_price, calc.currency as any)
+                                                    let text = `*Orçamento: ${calc.package_name || 'Pacote Turístico'}*\n\n`
+                                                    text += `Valor Final: *${priceFormatted}*\n\n`
+                                                    text += `\n_Gerado por LucroTur_`
+                                                    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank')
+                                                }}
+                                                title="Compartilhar no WhatsApp"
+                                            >
+                                                <MessageCircle className="h-4 w-4" />
+                                            </Button>
                                             <Button
                                                 variant="ghost"
                                                 size="icon"

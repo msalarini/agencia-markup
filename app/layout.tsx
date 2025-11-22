@@ -4,7 +4,9 @@ import './globals.css'
 import { Analytics } from '@/components/Analytics'
 import { AuthProvider } from '@/components/providers/AuthProvider'
 import { Header } from "@/components/layout/Header"
+import { Footer } from "@/components/layout/Footer"
 import { ThemeProvider } from "@/components/providers/ThemeProvider"
+import { Toaster } from "sonner"
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -56,11 +58,35 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AuthProvider>
-            <Header />
-            <Analytics />
-            {children}
+            <div className="flex min-h-screen flex-col">
+              <Header />
+              <Analytics />
+              <main className="flex-1">
+                {children}
+              </main>
+              <Footer />
+            </div>
+            <Toaster />
           </AuthProvider>
         </ThemeProvider>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'SoftwareApplication',
+              name: 'LucroTur',
+              applicationCategory: 'BusinessApplication',
+              operatingSystem: 'Web',
+              offers: {
+                '@type': 'Offer',
+                price: '0',
+                priceCurrency: 'BRL',
+              },
+              description: 'Calculadora de Markup para Agências de Turismo. Defina o preço de venda ideal para seus pacotes.',
+            }),
+          }}
+        />
       </body>
     </html>
   )

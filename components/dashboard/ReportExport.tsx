@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { FileDown, Loader2 } from 'lucide-react'
 import { generateReportPDF } from '@/lib/pdf/generateReportPDF'
+import { toast } from 'sonner'
 
 interface ReportExportProps {
     stats?: any
@@ -39,7 +40,7 @@ export function ReportExport({ stats }: ReportExportProps) {
             await generateReportPDF(reportData)
         } catch (error) {
             console.error('Erro ao exportar relatório:', error)
-            alert('Erro ao exportar relatório. Tente novamente.')
+            toast.error('Erro ao exportar relatório. Tente novamente.')
         } finally {
             setLoading(false)
         }

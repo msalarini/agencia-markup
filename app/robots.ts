@@ -4,6 +4,6 @@ export default function robots() {
             userAgent: '*',
             allow: '/',
         },
-        sitemap: 'https://pricepro.vercel.app/sitemap.xml',
+        sitemap: 'https://lucrotur.com.br/sitemap.xml',
     }
 }

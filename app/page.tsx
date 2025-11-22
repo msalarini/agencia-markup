@@ -12,13 +12,14 @@ import { formatCurrency as formatCurrencyUtil, formatPercent as formatPercentUti
 import { useAuth } from '@/components/providers/AuthProvider'
 import { TargetAudience } from '@/components/landing/TargetAudience'
 import { Benefits } from '@/components/landing/Benefits'
-import { LeadCapture } from '@/components/landing/LeadCapture'
 import { AIMarkupSuggestion } from '@/components/ai/AIMarkupSuggestion'
 import { ChatBot } from '@/components/ai/ChatBot'
 import { Logo } from '@/components/ui/logo'
 import { CurrencySelector } from '@/components/pro/CurrencySelector'
 import { formatCurrencyValue, type CurrencyCode } from '@/lib/currency/converter'
 import { useDebounce } from '@/hooks/useDebounce'
+import { ShareButtons } from '@/components/pro/ShareButtons'
+import { CommissionSplit } from '@/components/pro/CommissionSplit'
 
 interface PackageData {
   id: string
@@ -440,6 +441,7 @@ export default function Home() {
                       <p className="text-xl font-bold text-blue-700 dark:text-blue-300">
                         {formatCurrency(comissaoValor)}
                       </p>
+                      <CommissionSplit totalCommission={comissaoValor} currency={currency} />
                     </div>
 
                     <div className="p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg border border-emerald-200 dark:border-emerald-800">
@@ -496,6 +498,17 @@ export default function Home() {
                   </Card>
                 )}
               </CardContent>
+              <div className="px-6 pb-6">
+                <ShareButtons
+                  packageName={nomePacote}
+                  finalPrice={precoVenda}
+                  currency={currency}
+                  items={[
+                    { label: 'Custo Total', value: formatCurrency(custoTotal) },
+                    { label: 'Lucro', value: formatCurrency(lucroTotal) }
+                  ]}
+                />
+              </div>
             </Card>
           </div>
         </div>
@@ -583,7 +596,7 @@ export default function Home() {
           </CardContent>
         </Card>
 
-        <LeadCapture />
+
 
         <div className="text-center mt-12 text-muted-foreground">
           <p className="text-sm">
